@@ -1,8 +1,3 @@
-/* scripts.js
-   Handles theme toggle, skill bar animations, simple contact form behavior,
-   and a tiny mobile menu.
-*/
-
 document.addEventListener('DOMContentLoaded', () => {
   // Set current year
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -24,13 +19,34 @@ document.addEventListener('DOMContentLoaded', () => {
     updateThemeIcon();
   });
 
-  // Mobile menu toggle (simple)
+  // Mobile menu toggle
   const mobileToggle = document.getElementById('mobileMenuToggle');
   mobileToggle.addEventListener('click', () => {
     const nav = document.querySelector('.nav');
     if (!nav) return;
-    const isVisible = getComputedStyle(nav).display !== 'none';
-    nav.style.display = isVisible ? 'none' : 'flex';
+    nav.classList.toggle('active');
+    mobileToggle.textContent = nav.classList.contains('active') ? '✕' : '☰';
+  });
+
+  // Close mobile menu when clicking on a link
+  document.querySelectorAll('.nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      const nav = document.querySelector('.nav');
+      if (nav.classList.contains('active')) {
+        nav.classList.remove('active');
+        mobileToggle.textContent = '☰';
+      }
+    });
+  });
+
+  // Header scroll effect
+  const header = document.querySelector('.site-header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
   });
 
   // Animate skill bars when in viewport
@@ -74,27 +90,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!name || !email || !message) {
       statusEl.textContent = 'Please fill in all fields.';
+      statusEl.style.color = '#f87171';
       return;
     }
 
     // Fake sending: show success message and clear form
     statusEl.textContent = 'Sending message…';
+    statusEl.style.color = 'var(--muted)';
+    
     setTimeout(() => {
       statusEl.textContent = 'Thanks! Your message was sent (demo). I will get back to you soon.';
+      statusEl.style.color = 'var(--accent)';
       form.reset();
     }, 900);
   });
 
+  // Add fade-in animation to elements on scroll
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, {threshold: 0.1});
+
+  fadeElements.forEach(el => {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    fadeObserver.observe(el);
+  });
+
   // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      const href = a.getAttribute('href');
-      if (href.length > 1) {
-        e.preventDefault();
-        const el = document.querySelector(href);
-        if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        const headerHeight = document.querySelector('.site-header').offsetHeight;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
       }
     });
   });
-
 });
