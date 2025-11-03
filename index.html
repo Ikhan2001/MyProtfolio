@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark"> <!-- Default to dark mode -->
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -13,40 +13,51 @@
   <!-- Favicon -->
   <link rel="icon" href="assets/favicon.png" />
   <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <!-- Header -->
-  <header class="site-header" role="banner">
+<body data-theme="dark">
+
+  <!-- ===== HEADER (NEW) ===== -->
+  <header class="site-header">
     <div class="container header-inner">
-      <a class="logo" href="#home" aria-label="Intkhab Khan home">
-        <span class="logo-initials">IK</span>
-      </a>
+      <a class="logo" href="#home" aria-label="Intkhab Khan home">IK</a>
+      
       <nav class="nav" role="navigation" aria-label="Main navigation">
         <a href="#skills">Skills</a>
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
-        <a class="btn resume-btn" href="assets/Intkhab_Khan_Java_Developer.pdf" download>Download Resume</a>
       </nav>
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
-      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">☰</button>
+
+      <div class="header-actions">
+        <!-- New Theme Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+          <!-- Sun Icon -->
+          <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <!-- Moon Icon -->
+          <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <!-- Original Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
     </div>
   </header>
 
   <main>
-    <!-- HERO -->
+    <!-- ===== HERO (Original Structure) ===== -->
     <section id="home" class="hero" role="region" aria-labelledby="hero-heading">
       <div class="container hero-grid">
         <div class="hero-left fade-in">
           <div class="hero-heading">
+            <!-- Updated to static, professional heading -->
             <h1 id="hero-heading">
-              Hi, <span class="typing-container">
-                <span class="typing-text">I'm
-                  <span class="skill-percent">Intkhab Khan</span></span>
-              </span>
+              Intkhab Khan
               <br>
               <small>Java Backend Developer</small>
             </h1>
@@ -60,6 +71,10 @@
               </svg>
               Download Resume
             </a>
+            
+            <!-- ===== NEW "VIEW RESUME" BUTTON ===== -->
+            <button id="viewResumeBtn" class="btn ghost">View Resume</button>
+            
             <a class="btn ghost" href="#projects">View Projects</a>
           </div>
 
@@ -71,7 +86,7 @@
               </svg>
               <a href="mailto:intkhabkhanofficial@gmail.com">intkhabkhanofficial@gmail.com</a>
             </li>
-            <li>
+             <li>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 16.92V19.92C22 20.52 21.53 21 20.94 21C10.47 21 3 13.53 3 3.06C3 2.47 3.48 2 4.08 2H7.08C7.63 2 8.08 2.45 8.08 3C8.08 4.92 8.53 6.75 9.36 8.38C9.49 8.68 9.43 9.03 9.2 9.27L7.8 10.67C9.06 13.23 11.77 15.94 14.33 17.2L15.73 15.8C15.97 15.57 16.32 15.51 16.62 15.64C18.25 16.47 20.08 16.92 22 16.92Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
@@ -81,7 +96,7 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9 19C9 16.79 6.21 14 4 14C3.67 14 3.35 14.03 3.04 14.09C3.69 7.36 9.29 3 16 3C16.34 3 16.67 3.03 17 3.08V9H22C22.08 9.33 22.11 9.66 22.11 10C22.11 16.61 17.72 21 11.11 21C10.78 21 10.45 20.97 10.12 20.92V15.91C10.41 15.97 10.7 16 11 16C13.21 16 16 13.21 16 11V6C12.69 6 9.83 8.17 9 11.3V19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <a href="https://github.com/Ikhan2001" target="_blank" rel="noopener">github.com/Ikhan2001</a>
+              <a href="https://github.com/Ikhan2001" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
             </li>
             <li>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +104,7 @@
                 <path d="M6 9H2V21H6V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M4 6C5.10457 6 6 5.10457 6 4C6 2.89543 5.10457 2 4 2C2.89543 2 2 2.89543 2 4C2 5.10457 2.89543 6 4 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <a href="https://www.linkedin.com/in/intkhab-khan-6484181ba" target="_blank" rel="noopener">linkedin.com/in/intkhab-khan-6484181ba</a>
+              <a href="https://www.linkedin.com/in/intkhab-khan-6484181ba" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
             </li>
           </ul>
         </div>
@@ -104,7 +119,7 @@
       </div>
     </section>
 
-    <!-- SKILLS -->
+    <!-- ===== SKILLS (Original Structure) ===== -->
     <section id="skills" class="section" aria-labelledby="skills-heading">
       <div class="container">
         <div class="section-header">
@@ -170,8 +185,8 @@
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="section alt" aria-labelledby="projects-heading">
+    <!-- ===== PROJECTS (Original Structure + New SVGs) ===== -->
+    <section id="projects" class="section alt-bg" aria-labelledby="projects-heading">
       <div class="container">
         <div class="section-header">
           <h2 id="projects-heading">Selected Projects</h2>
@@ -182,10 +197,10 @@
           <article class="project-card fade-in" aria-labelledby="proj1-title">
             <div class="proj-media">
               <div class="project-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M9 12H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M12 9V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- NEW Custom SVG Logo for IMS -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <polyline points="7 13 10 16 17 9"></polyline>
                 </svg>
               </div>
             </div>
@@ -203,9 +218,12 @@
           <article class="project-card fade-in delay-1" aria-labelledby="proj2-title">
             <div class="proj-media">
               <div class="project-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 19L12 22M12 19C10.3431 19 9 17.6569 9 16V14C9 12.3431 10.3431 11 12 11C13.6569 11 15 12.3431 15 14V16C15 17.6569 13.6569 19 12 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- NEW Custom SVG Logo for LMS -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                  <line x1="12" y1="8" x2="16" y2="8"></line>
+                  <line x1="12" y1="12" x2="16" y2="12"></line>
                 </svg>
               </div>
             </div>
@@ -223,7 +241,7 @@
       </div>
     </section>
 
-    <!-- EXPERIENCE -->
+    <!-- ===== EXPERIENCE (Original Structure) ===== -->
     <section id="experience" class="section" aria-labelledby="experience-heading">
       <div class="container">
         <div class="section-header">
@@ -268,68 +286,81 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section alt" aria-labelledby="contact-heading">
-      <div class="container">
-        <div class="section-header">
-          <h2 id="contact-heading">Get in touch</h2>
-          <p class="muted">Open to remote and on-site opportunities. Fill the form or reach out directly.</p>
+    <!-- ===== CONTACT (NEW) ===== -->
+    <section id="contact" class="section alt-bg" aria-labelledby="contact-heading">
+      <div class="container contact-container">
+        <div class="contact-content fade-in">
+          <h2 id="contact-heading">Get In Touch</h2>
+          <p class="muted">I'm currently open to new opportunities as a Java Backend Developer. If you have a role you'd like to discuss, or just want to connect, feel free to send me a message.</p>
+          <div class="contact-details">
+            <a href="mailto:intkhabkhanofficial@gmail.com" class="contact-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <span>intkhabkhanofficial@gmail.com</span>
+            </a>
+            <a href="https://www.linkedin.com/in/intkhab-khan-6484181ba" target="_blank" rel="noopener noreferrer" class="contact-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              <span>LinkedIn Profile</span>
+            </a>
+          </div>
         </div>
 
-        <div class="contact-grid">
-          <form id="contactForm" class="contact-form fade-in" aria-label="Contact form">
+        <form 
+          id="contactForm" 
+          class="contact-form fade-in delay-1" 
+          action="https://formspree.io/f/xjkpqrov"
+          method="POST"
+          aria-label="Contact form"
+        >
+          <div class="form-group">
             <label for="name">Name</label>
             <input id="name" name="name" type="text" required placeholder="Your full name">
-
+          </div>
+          <div class="form-group">
             <label for="email">Email</label>
-            <input id="email" name="email" type="email" required placeholder="you@example.com">
-
+            <input id="email" name="_replyto" type="email" required placeholder="you@example.com">
+          </div>
+          <div class="form-group">
             <label for="message">Message</label>
-            <textarea id="message" name="message" rows="6" required placeholder="Tell me about the role or project..."></textarea>
-
-            <div class="form-actions">
-              <button type="submit" class="btn primary">Send Message</button>
-              <button type="button" id="mailtoFallback" class="btn ghost">Email Me</button>
-            </div>
-
-            <p id="formStatus" class="muted" aria-live="polite"></p>
-          </form>
-
-          <aside class="contact-aside fade-in delay-1" aria-labelledby="aside-heading">
-            <h3 id="aside-heading">Contact details</h3>
-            <p><strong>Email:</strong> <a href="mailto:intkhabkhanofficial@gmail.com">intkhabkhanofficial@gmail.com</a></p>
-            <p><strong>Phone:</strong> <a href="tel:+919608211197">+91 96082 11197</a></p>
-            <p><strong>Location:</strong> Noida, Uttar Pradesh, India</p>
-
-            <h4>Profiles</h4>
-            <ul class="social-list">
-              <li>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 19C9 16.79 6.21 14 4 14C3.67 14 3.35 14.03 3.04 14.09C3.69 7.36 9.29 3 16 3C16.34 3 16.67 3.03 17 3.08V9H22C22.08 9.33 22.11 9.66 22.11 10C22.11 16.61 17.72 21 11.11 21C10.78 21 10.45 20.97 10.12 20.92V15.91C10.41 15.97 10.7 16 11 16C13.21 16 16 13.21 16 11V6C12.69 6 9.83 8.17 9 11.3V19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <a href="https://github.com/Ikhan2001" target="_blank" rel="noopener">GitHub</a>
-              </li>
-              <li>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 8C17.5913 8 19.1174 8.63214 20.2426 9.75736C21.3679 10.8826 22 12.4087 22 14V21H18V14C18 13.4696 17.7893 12.9609 17.4142 12.5858C17.0391 12.2107 16.5304 12 16 12C15.4696 12 14.9609 12.2107 14.5858 12.5858C14.2107 12.9609 14 13.4696 14 14V21H10V14C10 12.4087 10.6321 10.8826 11.7574 9.75736C12.8826 8.63214 14.4087 8 16 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M6 9H2V21H6V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M4 6C5.10457 6 6 5.10457 6 4C6 2.89543 5.10457 2 4 2C2.89543 2 2 2.89543 2 4C2 5.10457 2.89543 6 4 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <a href="https://www.linkedin.com/in/intkhab-khan-6484181ba" target="_blank" rel="noopener">LinkedIn</a>
-              </li>
-            </ul>
-          </aside>
-        </div>
+            <textarea id="message" name="message" rows="5" required placeholder="Tell me about the role or project..."></textarea>
+          </div>
+          <button type="submit" class="btn primary form-submit-btn">Send Message</button>
+          <p id="formStatus" class="form-status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
   </main>
 
+  <!-- ===== FOOTER (Original Structure) ===== -->
   <footer class="site-footer" role="contentinfo">
     <div class="container">
       <p>© <span id="year"></span> Intkhab Khan. Built with Java-focused backend expertise. — <a href="assets/Intkhab_Khan_Java_Developer.pdf" download>Resume</a></p>
     </div>
   </footer>
 
+  <!-- Back to top button (New) -->
+  <a href="#home" class="back-to-top" aria-label="Back to top">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </a>
+
   <script src="script.js"></script>
+  
+  <!-- ===== RESUME MODAL (NEW) ===== -->
+  <div id="resumeModal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="resumeModalTitle">
+    <div class="modal-content" role="document">
+      <div class="modal-header">
+        <h2 id="resumeModalTitle">My Resume</h2>
+        <button id="closeModalBtn" class="modal-close-btn" aria-label="Close resume viewer">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Make sure this path is correct! -->
+        <iframe src="assets/Intkhab_Khan_Java_Developer.pdf" title="Intkhab Khan's Resume"></iframe>
+      </div>
+      <div class="modal-footer">
+        <a class="btn primary" href="assets/Intkhab_Khan_Java_Developer.pdf" download>Download PDF</a>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
+
