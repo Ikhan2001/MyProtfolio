@@ -286,6 +286,38 @@
       </div>
     </section>
 
+    <!-- ================= NOTES SECTION ================= -->
+
+<section id="notes" class="section">
+    <div class="container">
+
+        <div class="section-header">
+            <h2>Study Notes</h2>
+            <p class="muted">
+                Upload PDF, DOCX, TXT or Images and read them anytime.
+            </p>
+        </div>
+
+        <div class="notes-upload-box">
+
+            <input
+                    type="file"
+                    id="noteUploader"
+                    accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
+                    multiple
+                    hidden>
+
+            <button class="btn primary" id="uploadBtn">
+                Upload Notes
+            </button>
+
+        </div>
+
+        <div id="notesContainer" class="notes-grid"></div>
+
+    </div>
+</section>
+
     <!-- ===== CONTACT (NEW) ===== -->
     <section id="contact" class="section alt-bg" aria-labelledby="contact-heading">
       <div class="container contact-container">

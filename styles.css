@@ -961,3 +961,68 @@ a:hover {
 body.modal-open {
   overflow: hidden;
 }
+
+/* ================= NOTES ================= */
+
+.notes-upload-box{
+    text-align:center;
+    margin:40px 0;
+}
+
+.notes-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:20px;
+}
+
+.note-card{
+
+    background:var(--color-surface);
+
+    border:1px solid var(--color-border);
+
+    border-radius:12px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow-elevation-low);
+
+}
+
+.note-card h3{
+
+    margin-bottom:15px;
+
+    word-break:break-word;
+
+}
+
+.note-actions{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+.note-actions button{
+
+    flex:1;
+
+}
+
+.note-viewer{
+
+    width:100%;
+
+    height:600px;
+
+    border:none;
+
+    margin-top:20px;
+
+    border-radius:10px;
+
+}

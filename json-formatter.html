@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monokai JSON Formatter</title>
+    <meta name="description" content="A beautiful, single-file JSON Formatter with a Monokai theme, syntax highlighting, and correct indentation.">
+    
+    <!-- Fonts: Inter (UI) and Fira Code (Code) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========
+           1. THEME & VARIABLES
+           ========== */
+
+        :root {
+            /* Light Mode (Default) */
+            --bg-color: #FAFAFA;
+            --panel-bg: #FFFFFF;
+            --text-color: #212121;
+            --muted-color: #6c757d;
+            --border-color: #E0E0E0;
+            --accent-color: #007AFF;
+            --accent-hover: #0056b3;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+
+            /* Syntax Colors (Light) */
+            --key-color: #C51162;   /* Dark Pink */
+            --string-color: #4CAF50; /* Green */
+            --number-color: #FF6F00; /* Orange */
+            --boolean-color: #673AB7;/* Deep Purple */
+            --null-color: #673AB7;   /* Deep Purple */
+        }
+
+        :root.dark {
+            /* Dark Mode (Monokai) */
+            --bg-color: #222326;
+            --panel-bg: #272822;
+            --text-color: #F8F8F2;
+            --muted-color: #75715E;
+            --border-color: #414339;
+            --accent-color: #66D9EF;  /* Cyan */
+            --accent-hover: #80DEEA;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+
+            /* Syntax Colors (Monokai) */
+            --key-color: #F92672;     /* Pink */
+            --string-color: #A6E22E;  /* Green */
+            --number-color: #E6DB74;  /* Yellow */
+            --boolean-color: #AE81FF; /* Purple */
+            --null-color: #AE81FF;    /* Purple */
+        }
+
+        /* ==========
+           2. RESET & BASE STYLES
+           ========== */
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 10px;
+        }
+
+        /* ==========
+           3. HEADER & CONTROLS
+           ========== */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--panel-bg);
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            border-color: var(--accent-color);
+        }
+
+        .btn.primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--panel-bg);
+            font-weight: 700;
+        }
+        .dark .btn.primary {
+            color: #000;
+        }
+        .btn.primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Hide one icon based on theme */
+        .dark .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: none; }
+        .dark .theme-toggle .icon-moon { display: inline; }
+
+        /* ==========
+           4. MAIN CONTENT AREA
+           ========== */
+
+        .app-container {
+            flex: 1; /* Make this area fill the remaining height */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            min-height: 0; /* Critical for flexbox/grid scrolling */
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            min-height: 0;
+            overflow: hidden; /* Keeps content inside rounded borders */
+        }
+        
+        .panel-header {
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--muted-color);
+        }
+
+        /* Input Textarea */
+        #json-input {
+            flex: 1;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border: none;
+            outline: none;
+            padding: 1rem;
+            resize: none;
+            background-color: transparent;
+            color: var(--text-color);
+        }
+
+        /* Output <pre> block */
+        #output-wrapper {
+            flex: 1;
+            overflow: auto; /* This makes the panel scrollable */
+            padding: 1rem;
+            margin: 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        #json-output {
+            white-space: pre;
+        }
+
+        /* ==========
+           5. SYNTAX HIGHLIGHTING & MESSAGES
+           ========== */
+        
+        .placeholder-text {
+            color: var(--muted-color);
+            user-select: none;
+        }
+        
+        .error-message {
+            color: #F92672; /* Always use pink for errors */
+            background-color: rgba(249, 38, 114, 0.1);
+            border: 1px solid rgba(249, 38, 114, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+
+        .json-key { color: var(--key-color); font-weight: 500; }
+        .json-string { color: var(--string-color); }
+        .json-number { color: var(--number-color); }
+        .json-boolean { color: var(--boolean-color); font-weight: 500; }
+        .json-null { color: var(--null-color); font-weight: 500; }
+
+        /* ==========
+           6. TOAST NOTIFICATION
+           ========== */
+        
+        .toast {
+            position: fixed;
+            bottom: -100px; /* Start off-screen */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.75rem 1.5rem;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 500;
+            z-index: 1001;
+            transition: bottom 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .toast.show {
+            bottom: 2rem; /* Animate on-screen */
+        }
+        
+        /* ==========
+           7. RESPONSIVENESS
+           ========== */
+
+        @media (max-width: 800px) {
+            body {
+                height: auto; /* Allow body to grow */
+            }
+            .app-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                height: auto;
+            }
+            .panel {
+                /* Give panels a fixed height on mobile */
+                height: 50vh; 
+                min-height: 300px;
+            }
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+    </style>
+</head>
+<body class="dark"> <!-- Default to dark mode -->
+
+    <header class="header">
+        <h1>Monokai JSON Formatter</h1>
+        <div class="controls">
+            <button class="btn primary" id="btn-beautify">Beautify</button>
+            <button class="btn" id="btn-copy">Copy Output</button>
+            <button class="btn" id="btn-clear">Clear</button>
+            <button class="btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <span class="icon-sun">☀️</span>
+                <span class="icon-moon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-container">
+        
+        <!-- Input Panel -->
+        <section class="panel">
+            <div class="panel-header">Raw JSON Input</div>
+            <textarea id="json-input" placeholder='Paste your raw JSON here and click "Beautify"...' spellcheck="false"></textarea>
+        </section>
+
+        <!-- Output Panel -->
+        <section class="panel">
+            <div class="panel-header">Formatted Output</div>
+            <pre id="output-wrapper"><code id="json-output"><span class="placeholder-text">Your formatted JSON will appear here...</span></code></pre>
+        </section>
+
+    </main>
+
+    <!-- This div is used for toast notifications -->
+    <div id="toast-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Get DOM Elements ---
+            const jsonInput = document.getElementById('json-input');
+            const jsonOutput = document.getElementById('json-output');
+            const btnBeautify = document.getElementById('btn-beautify');
+            const btnCopy = document.getElementById('btn-copy');
+            const btnClear = document.getElementById('btn-clear');
+            const themeToggle = document.getElementById('theme-toggle');
+
+            const placeholderText = '<span class="placeholder-text">Your formatted JSON will appear here...</span>';
+
+            // --- Core Beautify Logic ---
+            btnBeautify.addEventListener('click', () => {
+                const rawJson = jsonInput.value;
+                if (!rawJson) {
+                    jsonOutput.innerHTML = placeholderText;
+                    return;
+                }
+
+                try {
+                    // 1. Parse the JSON
+                    const parsedJson = JSON.parse(rawJson);
+                    
+                    // 2. Format it into an HTML string
+                    const formattedHtml = formatJsonAsHtml(parsedJson);
+                    
+                    // 3. Display it
+                    jsonOutput.innerHTML = formattedHtml;
+
+                } catch (error) {
+                    // Handle invalid JSON
+                    jsonOutput.innerHTML = `<pre class="error-message"><strong>Invalid JSON:</strong>\n${error.message}</pre>`;
+                }
+            });
+
+            /**
+             * This is the core recursive function that builds the syntax-highlighted HTML.
+             * It manually builds the string, respecting indentation.
+             */
+            function formatJsonAsHtml(obj, indent = 0) {
+                const indentString = '  '.repeat(indent); // 2 spaces
+                const type = typeof obj;
+
+                // Primitives
+                if (obj === null) {
+                    return '<span class="json-null">null</span>';
+                }
+                if (type === 'string') {
+                    // Escape basic HTML characters
+                    const escapedString = obj.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return `<span class="json-string">"${escapedString}"</span>`;
+                }
+                if (type === 'number') {
+                    return `<span class="json-number">${obj}</span>`;
+                }
+                if (type === 'boolean') {
+                    return `<span class="json-boolean">${obj}</span>`;
+                }
+
+                // Arrays
+                if (Array.isArray(obj)) {
+                    if (obj.length === 0) {
+                        return '[]';
+                    }
+                    
+                    let html = '[\n';
+                    const childIndent = '  '.repeat(indent + 1);
+                    
+                    for (let i = 0; i < obj.length; i++) {
+                        html += childIndent + formatJsonAsHtml(obj[i], indent + 1);
+                        if (i < obj.length - 1) {
+                            html += ',';
+                        }
+                        html += '\n';
+                    }
+                    html += indentString + ']';
+                    return html;
+                }
+
+                // Objects
+                if (type === 'object') {
+                    const keys = Object.keys(obj);
+                    if (keys.length === 0) {
+                        return '{}';
+                    }
+
+                    let html = '{\n';
+                    const childIndent = '  '.repeat(indent + 1);
+
+                    for (let i = 0; i < keys.length; i++) {
+                        const key = keys[i];
+                        const value = obj[key];
+                        
+                        html += `${childIndent}<span class="json-key">"${key}"</span>: ${formatJsonAsHtml(value, indent + 1)}`;
+                        
+                        if (i < keys.length - 1) {
+                            html += ',';
+                        }
+                        html += '\n';
+                    }
+                    html += indentString + '}';
+                    return html;
+                }
+                
+                return String(obj); // Fallback
+            }
+
+            // --- Button Controls ---
+
+            btnClear.addEventListener('click', () => {
+                jsonInput.value = '';
+                jsonOutput.innerHTML = placeholderText;
+            });
+
+            btnCopy.addEventListener('click', () => {
+                // We use .textContent to get the raw text, not the HTML
+                const textToCopy = jsonOutput.textContent;
+                if (!textToCopy || jsonOutput.firstElementChild?.classList.contains('placeholder-text')) {
+                    showToast('Nothing to copy!');
+                    return;
+                }
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showToast('Copied to clipboard!');
+                }).catch(() => {
+                    showToast('Failed to copy.');
+                });
+            });
+
+            // --- Theme Toggle Logic ---
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                const newTheme = isDark ? 'dark' : 'light';
+                localStorage.setItem('json-formatter-theme', newTheme);
+                applyTheme(newTheme);
+            });
+
+            // Load saved theme or system preference
+            const savedTheme = localStorage.getItem('json-formatter-theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDark) {
+                applyTheme('dark');
+            } else {
+                applyTheme('light'); // Default
+            }
+
+            // --- Toast Notification ---
+            function showToast(message) {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = message;
+                
+                toastContainer.appendChild(toast);
+                
+                // Animate in
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10); // Small delay to ensure transition works
+
+                // Animate out
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    
+                    // Remove from DOM after transition
+                    toast.addEventListener('transitionend', () => {
+                        toast.remove();
+                    });
+                }, 3000); // Show for 3 seconds
+            }
+
+        });
+    </script>
+</body>
+</html>

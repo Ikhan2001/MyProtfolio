@@ -240,3 +240,152 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+/* ================= NOTES ================= */
+
+const uploadBtn = document.getElementById("uploadBtn");
+const uploader = document.getElementById("noteUploader");
+const notesContainer = document.getElementById("notesContainer");
+
+let notes = JSON.parse(localStorage.getItem("notes") || "[]");
+
+renderNotes();
+
+uploadBtn.addEventListener("click", () => {
+
+    uploader.click();
+
+});
+
+uploader.addEventListener("change", function () {
+
+    [...this.files].forEach(file => {
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+
+            notes.push({
+
+                id: Date.now() + Math.random(),
+
+                name: file.name,
+
+                type: file.type,
+
+                data: e.target.result
+
+            });
+
+            localStorage.setItem("notes", JSON.stringify(notes));
+
+            renderNotes();
+
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+});
+
+function renderNotes(){
+
+    notesContainer.innerHTML="";
+
+    notes.forEach(note=>{
+
+        const card=document.createElement("div");
+
+        card.className="note-card";
+
+        card.innerHTML=`
+
+            <h3>${note.name}</h3>
+
+            <div class="note-actions">
+
+                <button class="btn primary view-btn">
+                    View
+                </button>
+
+                <button class="btn ghost download-btn">
+                    Download
+                </button>
+
+                <button class="btn ghost delete-btn">
+                    Delete
+                </button>
+
+            </div>
+
+            <div class="viewer"></div>
+
+        `;
+
+        const viewer=card.querySelector(".viewer");
+
+        card.querySelector(".view-btn").onclick=()=>{
+
+            viewer.innerHTML="";
+
+            if(note.type.includes("pdf")){
+
+                viewer.innerHTML=`<iframe class="note-viewer" src="${note.data}"></iframe>`;
+
+            }
+
+            else if(note.type.startsWith("image")){
+
+                viewer.innerHTML=`<img src="${note.data}" style="width:100%">`;
+
+            }
+
+            else if(note.type.includes("text")){
+
+                fetch(note.data)
+
+                .then(r=>r.text())
+
+                .then(t=>{
+
+                    viewer.innerHTML=`<pre>${t}</pre>`;
+
+                });
+
+            }
+
+            else{
+
+                viewer.innerHTML=`<iframe class="note-viewer" src="${note.data}"></iframe>`;
+
+            }
+
+        };
+
+        card.querySelector(".download-btn").onclick=()=>{
+
+            const a=document.createElement("a");
+
+            a.href=note.data;
+
+            a.download=note.name;
+
+            a.click();
+
+        };
+
+        card.querySelector(".delete-btn").onclick=()=>{
+
+            notes=notes.filter(n=>n.id!==note.id);
+
+            localStorage.setItem("notes",JSON.stringify(notes));
+
+            renderNotes();
+
+        };
+
+        notesContainer.appendChild(card);
+
+    });
+
+}
